@@ -12,7 +12,7 @@ exports.handler = async (event) => {
         'x-api-key': process.env.ANTHROPIC_KEY,
         'anthropic-version': '2023-06-01'
       },
-     body: JSON.stringify({...body, model:'claude-3-opus-20240229'})
+     body: JSON.stringify({...body, model:claude-opus-4-7})
     });
 
     const data = await response.json();
