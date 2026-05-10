@@ -4,8 +4,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const body = JSON.parse(event.body);
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const body = JSON.parse(event.body);console.log('API key present:', !!process.env.ANTHROPIC_KEY, 'length:', (process.env.ANTHROPIC_KEY || '').length);    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
