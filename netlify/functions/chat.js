@@ -12,7 +12,7 @@ exports.handler = async (event) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-opus-20240229',
+        model: 'claude-haiku-4-5',
         max_tokens: 1000,
         system: body.system,
         messages: body.messages
