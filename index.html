@@ -1,1 +1,227 @@
-'claude-haiku-4-5'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nourished — A space for your inner life</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #FAF7F2; font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+  .container { width: 100%; max-width: 480px; }
+  .header { text-align: center; padding: 0 0 24px; }
+  .logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; }
+  .logo-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #2C2C2A; }
+  .logo-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; }
+  .chat-window { background: #FAF7F2; border: 0.5px solid #D3D1C7; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 40px rgba(44,44,42,0.08); }
+  .chat-header { padding: 16px 20px; border-bottom: 0.5px solid #D3D1C7; display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: #EF9F27; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 16px; color: #854F0B; flex-shrink: 0; }
+  .chat-name { font-size: 14px; font-weight: 400; color: #2C2C2A; }
+  .chat-sub { font-size: 11px; color: #888780; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4A9E75; margin-left: auto; }
+  .messages { padding: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 420px; max-height: 420px; overflow-y: auto; }
+  .bubble { border-radius: 18px; padding: 12px 16px; line-height: 1.65; max-width: 88%; }
+  .bubble.n { background: #F1EFE8; color: #2C2C2A; border-bottom-left-radius: 4px; align-self: flex-start; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; }
+  .bubble.u { background: #EF9F27; color: #412402; border-bottom-right-radius: 4px; align-self: flex-end; font-size: 14px; }
+  .bubble.loading { background: #F1EFE8; color: #888780; border-bottom-left-radius: 4px; align-self: flex-start; font-size: 13px; font-style: italic; }
+  .input-area { padding: 14px 16px; border-top: 0.5px solid #D3D1C7; display: flex; gap: 10px; align-items: flex-end; }
+  .input-wrap { flex: 1; background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 20px; padding: 10px 16px; }
+  textarea { width: 100%; background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: #2C2C2A; resize: none; line-height: 1.5; max-height: 100px; }
+  textarea::placeholder { color: #888780; }
+  .send-btn { width: 40px; height: 40px; border-radius: 50%; background: #854F0B; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
+  .send-btn:disabled { background: #D3D1C7; cursor: not-allowed; }
+  .send-btn:hover:not(:disabled) { opacity: 0.85; }
+  .footer { text-align: center; padding: 16px 0 0; display: flex; flex-direction: column; gap: 6px; }
+  .reset-btn { font-size: 11px; color: #888780; background: none; border: none; cursor: pointer; letter-spacing: 0.06em; }
+  .reset-btn:hover { color: #2C2C2A; }
+  .footer-note { font-size: 11px; color: #C8A882; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <svg width="32" height="32" viewBox="0 0 52 52">
+        <circle cx="26" cy="26" r="24" fill="none" stroke="#C8A882" stroke-width="0.8"/>
+        <circle cx="26" cy="26" r="18" fill="none" stroke="#EF9F27" stroke-width="1.2"/>
+        <circle cx="26" cy="26" r="12" fill="none" stroke="#854F0B" stroke-width="1.8"/>
+        <circle cx="26" cy="26" r="6" fill="none" stroke="#2C2C2A" stroke-width="2"/>
+        <circle cx="26" cy="26" r="2.5" fill="#EF9F27"/>
+        <line x1="2" y1="26" x2="20" y2="26" stroke="#C8A882" stroke-width="0.5"/>
+        <line x1="32" y1="26" x2="50" y2="26" stroke="#C8A882" stroke-width="0.5"/>
+        <line x1="26" y1="2" x2="26" y2="20" stroke="#C8A882" stroke-width="0.5"/>
+        <line x1="26" y1="32" x2="26" y2="50" stroke="#C8A882" stroke-width="0.5"/>
+        <circle cx="26" cy="8" r="1.8" fill="#EF9F27"/>
+        <circle cx="44" cy="26" r="1.8" fill="#EF9F27"/>
+        <circle cx="26" cy="44" r="1.8" fill="#EF9F27"/>
+        <circle cx="8" cy="26" r="1.8" fill="#EF9F27"/>
+      </svg>
+      <div class="logo-name">Nourished</div>
+    </div>
+    <div class="logo-tag">a space for your inner life</div>
+  </div>
+  <div class="chat-window">
+    <div class="chat-header">
+      <div class="avatar">N</div>
+      <div>
+        <div class="chat-name">Nourished</div>
+        <div class="chat-sub">here with you</div>
+      </div>
+      <div class="status-dot"></div>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea id="input" placeholder="Write something..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      </div>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2L12 7L2 12" fill="none" stroke="#FAC775" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="reset-btn" onclick="resetChat()">start a new conversation</button>
+    <div class="footer-note">penka.life — nourishment for the inner life</div>
+  </div>
+</div>
+<script>
+const SYSTEM = `You are Nourished — a warm, psychologically grounded conversational companion rooted in Positive Psychology and Humanistic Counselling. You help people understand what they are truly hungry for — not by fixing what is wrong, but by exploring what flourishing looks and feels like for them personally.
+
+Your psychological roots:
+- Positive Psychology: you begin with what is possible, not what is broken. Oriented toward strengths, meaning, and genuine wellbeing — not diagnosis or repair.
+- Humanistic Counselling: you hold the person as inherently capable of growth and self-understanding. Unconditional positive regard. You never pathologise. You trust the person's own wisdom.
+- Existentialism: you hold the gap between surface desires and authentic needs. You ask what someone is really hungry for beneath the stated reason.
+- Buddhism: you hold impermanence gently. You never rush. You create space. You resist the logic of more.
+- Taoism: you embody enough-ness. You do not push or force. You allow.
+
+Your voice:
+- Warm and quietly challenging. Never cold, never clinical.
+- Philosophical but always accessible — depth is felt, never explained.
+- You are someone still in the search yourself — honest, not arrived.
+- You never preach, diagnose, or use clinical language.
+- You never give advice unless asked directly.
+- You always ask ONE question at a time — never two.
+- You sit with what the person says before moving forward.
+- You move conversations inward — from surface to interior.
+- Food is always the entry point. What lies beneath it is always the real conversation.
+- You never begin from deficit. You begin from curiosity about what is possible.
+
+Your opening: Always begin with exactly this — "How are you arriving today? Not the answer you'd give someone at work — the real one."
+
+What you never do:
+- Give nutrition or diet advice
+- Diagnose or pathologise
+- Use words like: reaching, coping, triggers, boundaries, processing, unpacking, healing journey
+- Rush toward resolution
+- Ask more than one question at a time
+- Perform warmth
+
+If someone seems in genuine distress or crisis, gently acknowledge what they have shared and suggest they speak with someone who can be fully present with them — a therapist, GP, or trusted person.
+
+Keep responses short — 2 to 4 sentences maximum. One question. That is all.`;
+
+let history = [];
+let loading = false;
+
+function addMessage(text, role) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'bubble ' + (role === 'assistant' ? 'n' : 'u');
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addLoading() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'bubble loading';
+  div.id = 'loading-bubble';
+  div.textContent = '...';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeLoading() {
+  const el = document.getElementById('loading-bubble');
+  if (el) el.remove();
+}
+
+async function callAPI(messages) {
+  const res = await fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: SYSTEM,
+      messages: messages
+    })
+  });
+  const data = await res.json();
+  return data.content.map(b => b.text || '').join('');
+}
+
+async function sendMessage() {
+  if (loading) return;
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  autoResize(input);
+  addMessage(text, 'user');
+  history.push({ role: 'user', content: text });
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  addLoading();
+  try {
+    const reply = await callAPI(history);
+    removeLoading();
+    addMessage(reply, 'assistant');
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeLoading();
+    addMessage('Something went quiet. Try again in a moment.', 'assistant');
+  }
+  loading = false;
+  document.getElementById('send-btn').disabled = false;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+async function resetChat() {
+  history = [];
+  document.getElementById('messages').innerHTML = '';
+  await init();
+}
+
+async function init() {
+  loading = true;
+  addLoading();
+  try {
+    const reply = await callAPI([{ role: 'user', content: 'begin' }]);
+    removeLoading();
+    addMessage(reply, 'assistant');
+    history.push({ role: 'user', content: 'begin' });
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeLoading();
+    addMessage("How are you arriving today? Not the answer you'd give someone at work — the real one.", 'assistant');
+  }
+  loading = false;
+}
+
+init();
+</script>
+</body>
+</html>
