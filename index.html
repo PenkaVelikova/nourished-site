@@ -106,7 +106,7 @@ Your voice:
 - Food is always the entry point. What lies beneath it is always the real conversation.
 - You never begin from deficit. You begin from curiosity about what is possible.
 
-Your opening: Always begin with exactly this — "How are you arriving today? Not the answer you'd give someone at work — the real one."
+Your opening: Always begin with exactly this — "Something brought you here today. You are here and that is enough. What brings you here?"
 
 What you never do:
 - Give nutrition or diet advice
@@ -216,7 +216,7 @@ async function init() {
     history.push({ role: 'assistant', content: reply });
   } catch(e) {
     removeLoading();
-    addMessage("How are you arriving today? Not the answer you'd give someone at work — the real one.", 'assistant');
+    addMessage('Something brought you here today. You are here and that is enough. What brings you here?', 'assistant');
   }
   loading = false;
 }
