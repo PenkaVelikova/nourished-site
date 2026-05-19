@@ -1,46 +1,900 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nourished — A space for your inner life</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<title>Penka.Life — Nourishment for the Inner Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --parchment: #FAF7F2;
+    --linen: #F1EFE8;
+    --ochre: #EF9F27;
+    --amber: #854F0B;
+    --sand: #C8A882;
+    --earth: #5C4A38;
+    --near-black: #2C2C2A;
+    --muted: #888780;
+    --border: #D3D1C7;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #FAF7F2; font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-  .container { width: 100%; max-width: 480px; }
-  .header { text-align: center; padding: 0 0 24px; }
-  .logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; }
-  .logo-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #2C2C2A; }
-  .logo-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; }
-  .chat-window { background: #FAF7F2; border: 0.5px solid #D3D1C7; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 40px rgba(44,44,42,0.08); }
-  .chat-header { padding: 16px 20px; border-bottom: 0.5px solid #D3D1C7; display: flex; align-items: center; gap: 12px; }
-  .avatar { width: 36px; height: 36px; border-radius: 50%; background: #EF9F27; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 16px; color: #854F0B; flex-shrink: 0; }
-  .chat-name { font-size: 14px; font-weight: 400; color: #2C2C2A; }
-  .chat-sub { font-size: 11px; color: #888780; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4A9E75; margin-left: auto; }
-  .messages { padding: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 420px; max-height: 420px; overflow-y: auto; }
-  .bubble { border-radius: 18px; padding: 12px 16px; line-height: 1.65; max-width: 88%; }
-  .bubble.n { background: #F1EFE8; color: #2C2C2A; border-bottom-left-radius: 4px; align-self: flex-start; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; }
-  .bubble.u { background: #EF9F27; color: #412402; border-bottom-right-radius: 4px; align-self: flex-end; font-size: 14px; }
-  .bubble.loading { background: #F1EFE8; color: #888780; border-bottom-left-radius: 4px; align-self: flex-start; font-size: 13px; font-style: italic; }
-  .input-area { padding: 14px 16px; border-top: 0.5px solid #D3D1C7; display: flex; gap: 10px; align-items: flex-end; }
-  .input-wrap { flex: 1; background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 20px; padding: 10px 16px; }
-  textarea { width: 100%; background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: #2C2C2A; resize: none; line-height: 1.5; max-height: 100px; }
-  textarea::placeholder { color: #888780; }
-  .send-btn { width: 40px; height: 40px; border-radius: 50%; background: #854F0B; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
-  .send-btn:disabled { background: #D3D1C7; cursor: not-allowed; }
-  .send-btn:hover:not(:disabled) { opacity: 0.85; }
-  .footer { text-align: center; padding: 16px 0 0; display: flex; flex-direction: column; gap: 6px; }
-  .reset-btn { font-size: 11px; color: #888780; background: none; border: none; cursor: pointer; letter-spacing: 0.06em; }
-  .reset-btn:hover { color: #2C2C2A; }
-  .footer-note { font-size: 11px; color: #C8A882; letter-spacing: 0.04em; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--near-black);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 0.5px solid var(--border);
+    transition: padding 0.3s;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-symbol svg { display: block; }
+
+  .nav-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--near-black);
+    letter-spacing: -0.3px;
+  }
+
+  .nav-name span { color: var(--ochre); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--near-black); }
+
+  .nav-cta {
+    background: var(--amber) !important;
+    color: #FAC775 !important;
+    padding: 9px 22px;
+    border-radius: 20px;
+    font-size: 12px !important;
+    letter-spacing: 0.04em !important;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85 !important; color: #FAC775 !important; }
+
+  /* HERO */
+  #home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+
+  .hero-content {
+    max-width: 680px;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 0.5px;
+    background: var(--sand);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--near-black);
+    margin-bottom: 28px;
+    letter-spacing: -1px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 44px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .btn-primary {
+    background: var(--amber);
+    color: #FAC775;
+    padding: 14px 32px;
+    border-radius: 28px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .btn-ghost {
+    font-size: 13px;
+    color: var(--near-black);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    transition: gap 0.2s;
+  }
+
+  .btn-ghost:hover { gap: 12px; }
+
+  .hero-symbol {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.15;
+    animation: slowSpin 60s linear infinite;
+  }
+
+  @keyframes slowSpin { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(360deg); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sand);
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 0.5px;
+    background: var(--sand);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* DIVIDER */
+  .divider-line {
+    height: 0.5px;
+    background: var(--border);
+    margin: 0 60px;
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 120px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .about-label::before {
+    content: '';
+    width: 32px;
+    height: 0.5px;
+    background: var(--sand);
+  }
+
+  .about-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 28px;
+    letter-spacing: -0.5px;
+  }
+
+  .about-title em { font-style: italic; color: var(--amber); }
+
+  .about-body {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .about-quote {
+    border-left: 2px solid var(--ochre);
+    padding-left: 20px;
+    margin: 32px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--earth);
+    line-height: 1.6;
+  }
+
+  .about-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .about-symbol-wrap {
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .about-symbol-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--linen);
+    border: 0.5px solid var(--border);
+  }
+
+  .credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .credential {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--linen);
+    border-radius: 8px;
+    border: 0.5px solid var(--border);
+  }
+
+  .credential-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ochre);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .credential-text {
+    font-size: 13px;
+    color: var(--near-black);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .credential-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  /* PHILOSOPHY */
+  #philosophy {
+    padding: 120px 60px;
+    background: var(--near-black);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .philosophy-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .philosophy-label::before {
+    content: '';
+    width: 32px;
+    height: 0.5px;
+    background: var(--sand);
+  }
+
+  .philosophy-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 300;
+    color: var(--parchment);
+    line-height: 1.2;
+    max-width: 640px;
+    margin-bottom: 80px;
+    letter-spacing: -0.5px;
+  }
+
+  .philosophy-title em { font-style: italic; color: var(--ochre); }
+
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .philosophy-card {
+    padding: 40px 36px;
+    background: rgba(250,247,242,0.04);
+    border: 0.5px solid rgba(211,209,199,0.15);
+    transition: background 0.3s;
+  }
+
+  .philosophy-card:hover { background: rgba(250,247,242,0.07); }
+
+  .philosophy-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: rgba(239,159,39,0.2);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .philosophy-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--parchment);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .philosophy-card-body {
+    font-size: 13px;
+    color: var(--sand);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .philosophy-bg-symbol {
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.04;
+  }
+
+  /* SERVICES */
+  #services {
+    padding: 120px 60px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 32px;
+    height: 0.5px;
+    background: var(--sand);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .section-title em { font-style: italic; color: var(--amber); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .service-card {
+    padding: 44px 36px;
+    background: var(--linen);
+    border: 0.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .service-card:hover { background: #EBE8E0; }
+
+  .service-card.featured {
+    background: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .service-card.featured:hover { background: #6E4009; }
+
+  .service-tag {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 28px;
+  }
+
+  .service-card.featured .service-tag { color: #FAC775; opacity: 0.7; }
+
+  .service-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--near-black);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .service-card.featured .service-price { color: #FAC775; }
+
+  .service-price-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .service-card.featured .service-price-sub { color: rgba(250,199,117,0.7); }
+
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--near-black);
+    margin-bottom: 12px;
+  }
+
+  .service-card.featured .service-name { color: #FAF7F2; }
+
+  .service-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .service-card.featured .service-desc { color: rgba(250,199,117,0.8); }
+
+  .service-link {
+    font-size: 12px;
+    color: var(--amber);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.2s;
+  }
+
+  .service-card.featured .service-link { color: #FAC775; }
+  .service-link:hover { gap: 12px; }
+
+  /* NOURISHED APP */
+  #nourished {
+    padding: 120px 60px;
+    background: var(--linen);
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .nourished-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .app-preview {
+    background: #FAF7F2;
+    border-radius: 24px;
+    padding: 28px 24px 16px;
+    border: 0.5px solid var(--border);
+    box-shadow: 0 24px 64px rgba(44,44,42,0.08);
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .app-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .app-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ochre);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--amber);
+    font-weight: 500;
+  }
+
+  .app-name { font-size: 13px; font-weight: 400; color: var(--near-black); }
+  .app-sub { font-size: 10px; color: var(--muted); }
+  .app-dot { width: 6px; height: 6px; border-radius: 50%; background: #4A9E75; margin-left: auto; }
+
+  .app-messages { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+  .app-bubble {
+    border-radius: 14px;
+    padding: 10px 13px;
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 88%;
+    font-weight: 300;
+  }
+
+  .app-bubble.n {
+    background: var(--linen);
+    color: var(--near-black);
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .app-bubble.u {
+    background: var(--ochre);
+    color: var(--amber);
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-style: normal;
+  }
+
+  .app-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--linen);
+    border-radius: 20px;
+    padding: 8px 14px;
+    border: 0.5px solid var(--border);
+  }
+
+  .app-input { font-size: 12px; color: var(--muted); flex: 1; }
+
+  .app-send {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* BLOG */
+  #blog { padding: 120px 60px; }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+
+  .blog-card {
+    padding: 40px 32px;
+    background: var(--linen);
+    border: 0.5px solid var(--border);
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s;
+  }
+
+  .blog-card:hover { background: #EBE8E0; }
+
+  .blog-date {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 20px;
+  }
+
+  .blog-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--near-black);
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+
+  .blog-excerpt {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  .blog-read {
+    font-size: 11px;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* CONTACT */
+  #contact {
+    padding: 120px 60px;
+    background: var(--near-black);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-inner {
+    max-width: 600px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    color: var(--parchment);
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+
+  .contact-title em { font-style: italic; color: var(--ochre); }
+
+  .contact-sub {
+    font-size: 15px;
+    color: var(--sand);
+    line-height: 1.8;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sand);
+  }
+
+  .form-input, .form-textarea {
+    background: rgba(250,247,242,0.06);
+    border: 0.5px solid rgba(211,209,199,0.2);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--parchment);
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(200,168,130,0.4); }
+  .form-input:focus, .form-textarea:focus { border-color: rgba(239,159,39,0.5); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+
+  .form-submit {
+    background: var(--ochre);
+    color: var(--amber);
+    border: none;
+    padding: 14px 36px;
+    border-radius: 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .form-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .contact-details {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+  }
+
+  .contact-detail { font-size: 13px; color: var(--sand); font-weight: 300; }
+  .contact-detail strong { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(200,168,130,0.5); margin-bottom: 4px; font-weight: 400; }
+  .contact-detail a { color: var(--sand); text-decoration: none; }
+  .contact-detail a:hover { color: var(--ochre); }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 60px;
+    background: var(--near-black);
+    border-top: 0.5px solid rgba(211,209,199,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy { font-size: 11px; color: rgba(200,168,130,0.4); font-weight: 300; }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 11px;
+    color: rgba(200,168,130,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--sand); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #home { padding: 100px 24px 60px; }
+    .hero-symbol { display: none; }
+    #about { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    .about-visual { display: none; }
+    #philosophy { padding: 80px 24px; }
+    .philosophy-grid { grid-template-columns: 1fr; }
+    #services { padding: 80px 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    #nourished { padding: 80px 24px; }
+    .nourished-inner { grid-template-columns: 1fr; }
+    #blog { padding: 80px 24px; }
+    .blog-grid { grid-template-columns: 1fr; }
+    #contact { padding: 80px 24px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 24px; flex-direction: column; gap: 16px; text-align: center; }
+    .divider-line { margin: 0 24px; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="logo">
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="nav-symbol">
       <svg width="32" height="32" viewBox="0 0 52 52">
         <circle cx="26" cy="26" r="24" fill="none" stroke="#C8A882" stroke-width="0.8"/>
         <circle cx="26" cy="26" r="18" fill="none" stroke="#EF9F27" stroke-width="1.2"/>
@@ -56,172 +910,404 @@
         <circle cx="26" cy="44" r="1.8" fill="#EF9F27"/>
         <circle cx="8" cy="26" r="1.8" fill="#EF9F27"/>
       </svg>
-      <div class="logo-name">Nourished</div>
     </div>
-    <div class="logo-tag">a space for your inner life</div>
+    <div class="nav-name">Penka<span>.</span>Life</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#nourished">Nourished</a></li>
+    <li><a href="#blog">Writing</a></li>
+    <li><a href="#contact" class="nav-cta">Begin</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg">
+    <div class="hero-bg-circle" style="width:600px;height:600px;background:var(--ochre);top:-200px;right:-100px;"></div>
+    <div class="hero-bg-circle" style="width:300px;height:300px;background:var(--amber);bottom:-100px;left:-50px;"></div>
   </div>
-  <div class="chat-window">
-    <div class="chat-header">
-      <div class="avatar">N</div>
-      <div>
-        <div class="chat-name">Nourished</div>
-        <div class="chat-sub">here with you</div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Nourishment for the inner life</div>
+    <h1 class="hero-title">
+      For those who sense<br>
+      something <em>is missing</em><br>
+      but cannot name it
+    </h1>
+    <p class="hero-sub">A space to understand what you are truly hungry for — using food, psychology, and the philosophy of nourishment as a way back to yourself.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Begin your journey</a>
+      <a href="#nourished" class="btn-ghost">Try Nourished <span>→</span></a>
+    </div>
+  </div>
+
+  <div class="hero-symbol">
+    <svg width="480" height="480" viewBox="0 0 480 480">
+      <circle cx="240" cy="240" r="220" fill="none" stroke="#2C2C2A" stroke-width="1"/>
+      <circle cx="240" cy="240" r="170" fill="none" stroke="#2C2C2A" stroke-width="1"/>
+      <circle cx="240" cy="240" r="120" fill="none" stroke="#2C2C2A" stroke-width="1"/>
+      <circle cx="240" cy="240" r="70" fill="none" stroke="#2C2C2A" stroke-width="1"/>
+      <circle cx="240" cy="240" r="20" fill="#2C2C2A"/>
+      <line x1="20" y1="240" x2="220" y2="240" stroke="#2C2C2A" stroke-width="0.5"/>
+      <line x1="260" y1="240" x2="460" y2="240" stroke="#2C2C2A" stroke-width="0.5"/>
+      <line x1="240" y1="20" x2="240" y2="220" stroke="#2C2C2A" stroke-width="0.5"/>
+      <line x1="240" y1="260" x2="240" y2="460" stroke="#2C2C2A" stroke-width="0.5"/>
+    </svg>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-content">
+    <div class="about-label">Who I am</div>
+    <h2 class="about-title">Thirty years of food.<br><em>A lifetime of questions.</em></h2>
+    <p class="about-body">I am Penka. I have spent thirty years immersed in the world of food and hospitality — not as an observer, but from the inside. Managing teams under pressure, holding space for others while carrying my own questions, developing a psychological intelligence that most people around me never noticed.</p>
+    <p class="about-body">Alongside that, I have spent twenty years studying and practising psychology — from Applied Psychology and Criminology, through Humanistic Therapeutic Counselling, to an MSc in Applied Positive Psychology and Coaching Psychology. The academic and the human have always run together in me. Neither one alone would have been enough.</p>
+    <div class="about-quote">"The gap between how we appear and how we actually feel — that is where the real work begins."</div>
+    <div class="credentials">
+      <div class="credential">
+        <div class="credential-dot"></div>
+        <div>
+          <div class="credential-text">MSc Applied Positive Psychology & Coaching Psychology</div>
+          <div class="credential-sub">Highest qualification · most recent</div>
+        </div>
       </div>
-      <div class="status-dot"></div>
-    </div>
-    <div class="messages" id="messages"></div>
-    <div class="input-area">
-      <div class="input-wrap">
-        <textarea id="input" placeholder="Write something..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <div class="credential">
+        <div class="credential-dot"></div>
+        <div>
+          <div class="credential-text">PGCert Humanistic Therapeutic Counselling</div>
+          <div class="credential-sub">2013</div>
+        </div>
       </div>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()">
-        <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2L12 7L2 12" fill="none" stroke="#FAC775" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+      <div class="credential">
+        <div class="credential-dot"></div>
+        <div>
+          <div class="credential-text">BCs Applied Psychology & Criminology</div>
+          <div class="credential-sub">2012</div>
+        </div>
+      </div>
+      <div class="credential">
+        <div class="credential-dot"></div>
+        <div>
+          <div class="credential-text">20 years of psychological practice</div>
+          <div class="credential-sub">Alongside 30 years in food and hospitality</div>
+        </div>
+      </div>
+      <div class="credential">
+        <div class="credential-dot"></div>
+        <div>
+          <div class="credential-text">Founder of Nourished</div>
+          <div class="credential-sub">A conversational app for inner wellbeing</div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="footer">
-    <button class="reset-btn" onclick="resetChat()">start a new conversation</button>
-    <div class="footer-note">penka.life — nourishment for the inner life</div>
+
+  <div class="about-visual">
+    <div class="about-symbol-wrap">
+      <div class="about-symbol-bg"></div>
+      <svg width="240" height="240" viewBox="0 0 52 52" style="position:relative;z-index:1;">
+        <circle cx="26" cy="26" r="24" fill="none" stroke="#C8A882" stroke-width="0.8"/>
+        <circle cx="26" cy="26" r="18" fill="none" stroke="#EF9F27" stroke-width="1.2"/>
+        <circle cx="26" cy="26" r="12" fill="none" stroke="#854F0B" stroke-width="1.8"/>
+        <circle cx="26" cy="26" r="6" fill="none" stroke="#2C2C2A" stroke-width="2"/>
+        <circle cx="26" cy="26" r="2.5" fill="#EF9F27"/>
+        <line x1="2" y1="26" x2="20" y2="26" stroke="#C8A882" stroke-width="0.5"/>
+        <line x1="32" y1="26" x2="50" y2="26" stroke="#C8A882" stroke-width="0.5"/>
+        <line x1="26" y1="2" x2="26" y2="20" stroke="#C8A882" stroke-width="0.5"/>
+        <line x1="26" y1="32" x2="26" y2="50" stroke="#C8A882" stroke-width="0.5"/>
+        <circle cx="26" cy="8" r="1.8" fill="#EF9F27"/>
+        <circle cx="44" cy="26" r="1.8" fill="#EF9F27"/>
+        <circle cx="26" cy="44" r="1.8" fill="#EF9F27"/>
+        <circle cx="8" cy="26" r="1.8" fill="#EF9F27"/>
+      </svg>
+    </div>
   </div>
-</div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <div class="philosophy-label">The philosophy</div>
+  <h2 class="philosophy-title">This is not about fixing what is broken.<br>It is about <em>understanding what flourishing</em> looks like for you.</h2>
+
+  <div class="philosophy-grid">
+    <div class="philosophy-card">
+      <div class="philosophy-num">01</div>
+      <div class="philosophy-card-title">Not fixing. Flourishing.</div>
+      <p class="philosophy-card-body">Most approaches to wellbeing begin with what is wrong. This one begins with what is possible. Rooted in Positive Psychology and Humanistic Counselling, the work here is not about diagnosing or repairing — it is about understanding what a genuinely good life looks and feels like for you, and moving toward it.</p>
+    </div>
+    <div class="philosophy-card">
+      <div class="philosophy-num">02</div>
+      <div class="philosophy-card-title">The person, not the problem</div>
+      <p class="philosophy-card-body">Humanistic psychology holds that every person is inherently capable of growth, meaning-making, and self-understanding — given the right conditions. You are not broken. You may simply be undernourished. That is a different starting point, and it leads somewhere different.</p>
+    </div>
+    <div class="philosophy-card">
+      <div class="philosophy-num">03</div>
+      <div class="philosophy-card-title">The severed thread</div>
+      <p class="philosophy-card-body">Modern life has quietly dismantled the ancient relationship between food, meaning, and belonging. We have kept the eating. We have lost the nourishment. Restoring that thread — personally, deliberately — is one of the most radical acts of self-care available to us.</p>
+    </div>
+  </div>
+
+  <div class="philosophy-bg-symbol">
+    <svg width="500" height="500" viewBox="0 0 52 52">
+      <circle cx="26" cy="26" r="24" fill="none" stroke="white" stroke-width="0.3"/>
+      <circle cx="26" cy="26" r="18" fill="none" stroke="white" stroke-width="0.3"/>
+      <circle cx="26" cy="26" r="12" fill="none" stroke="white" stroke-width="0.3"/>
+      <circle cx="26" cy="26" r="6" fill="none" stroke="white" stroke-width="0.3"/>
+    </svg>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header">
+    <div>
+      <div class="section-label">How I work</div>
+      <h2 class="section-title">Ways to work<br><em>together</em></h2>
+    </div>
+    <p style="font-size:13px; color:var(--muted); max-width:280px; font-weight:300; line-height:1.7;">All sessions are conducted online. Each one is unhurried, grounded, and genuinely personal.</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-tag">Single session</div>
+      <div class="service-price">£90</div>
+      <div class="service-price-sub">90 minutes · online</div>
+      <div class="service-name">Personal Growth Session</div>
+      <p class="service-desc">A single deep session for people ready to look honestly at where they are and what they want. No agenda beyond what matters to you.</p>
+      <a href="#contact" class="service-link">Book a session →</a>
+    </div>
+
+    <div class="service-card featured">
+      <div class="service-tag">Most meaningful</div>
+      <div class="service-price" style="font-size:32px;">£750</div>
+      <div class="service-price-sub">6 sessions · 60 min each</div>
+      <div class="service-name">Coaching Container</div>
+      <p class="service-desc">Six sessions designed to go somewhere real. Space to slow down, reflect, and begin to choose differently. This is where genuine change happens.</p>
+      <a href="#contact" class="service-link">Begin →</a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-tag">Ongoing practice</div>
+      <div class="service-price">£60</div>
+      <div class="service-price-sub">60 minutes · online</div>
+      <div class="service-name">Mindfulness Coaching</div>
+      <p class="service-desc">A quieter, more contemplative session. For people who want to develop a regular practice of presence, reflection, and intentional living.</p>
+      <a href="#contact" class="service-link">Book a session →</a>
+    </div>
+  </div>
+
+  <div style="margin-top: 2px;">
+    <div class="service-card" style="background:var(--parchment);">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px; align-items:center;">
+        <div>
+          <div class="service-tag">Self-paced</div>
+          <div class="service-name">Life Reflection Course</div>
+          <p class="service-desc" style="margin-bottom:20px;">A structured journey through the questions that matter — meaning, identity, belonging, and what it truly means to flourish. Work at your own pace, in your own time.</p>
+          <a href="#contact" class="service-link">View course →</a>
+        </div>
+        <div style="text-align:right;">
+          <div class="service-price">£150</div>
+          <div class="service-price-sub">Self-paced · lifetime access</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- NOURISHED APP -->
+<section id="nourished">
+  <div class="nourished-inner">
+    <div>
+      <div class="section-label">The app</div>
+      <h2 class="section-title">Meet <em>Nourished</em></h2>
+      <p style="font-size:15px; color:var(--muted); line-height:1.9; margin: 20px 0 28px; font-weight:300;">A conversational companion rooted in Positive Psychology and Humanistic Counselling. Not a therapy app. Not a wellness tracker. A space that begins not from what is wrong — but from what is possible for you.</p>
+      <p style="font-size:15px; color:var(--muted); line-height:1.9; margin-bottom:16px; font-weight:300;">Using food, cooking, and the philosophy of nourishment as a doorway into deeper questions about meaning, belonging, and what genuinely flourishing looks like in your life.</p>
+      <p style="font-family:'Cormorant Garamond',serif; font-size:19px; font-style:italic; color:var(--earth); line-height:1.7; margin-bottom:16px; border-left: 2px solid var(--ochre); padding-left: 16px;">For those already in therapy, Nourished is the daily space between sessions.</p>
+      <p style="font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:36px; font-weight:300;">Nourished is not a replacement for therapy or medical support. If you are in crisis or need clinical help, please speak with a qualified professional or your GP.</p>
+      <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <a href="/app.html" class="btn-primary">Try Nourished</a>
+        <a href="/app.html" style="font-size:13px; color:var(--amber); text-decoration:none; display:flex; align-items:center; gap:8px; padding:14px 0;">Try the app →</a>
+      </div>
+      <div style="display:flex; gap:28px; margin-top:36px;">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--near-black);">£6.99</div>
+          <div style="font-size:11px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase;">per month</div>
+        </div>
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--near-black);">Daily</div>
+          <div style="font-size:11px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase;">check-ins</div>
+        </div>
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--near-black);">∞</div>
+          <div style="font-size:11px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase;">conversations</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="app-preview">
+        <div class="app-bar">
+          <div class="app-avatar">N</div>
+          <div>
+            <div class="app-name">Nourished</div>
+            <div class="app-sub">here with you</div>
+          </div>
+          <div class="app-dot"></div>
+        </div>
+        <div class="app-messages">
+          <div class="app-bubble n">How are you arriving today? Not the answer you'd give someone at work — the real one.</div>
+          <div class="app-bubble u">Tired. I ate badly all week and I feel terrible about it.</div>
+          <div class="app-bubble n">Terrible about the eating — or terrible about something else, and the eating is where it's showing up?</div>
+          <div class="app-bubble u">...probably the second one.</div>
+          <div class="app-bubble n">That's worth sitting with. What's happened this week that you haven't fully put down yet?</div>
+        </div>
+        <div class="app-input-row">
+          <div class="app-input">Write something...</div>
+          <div class="app-send">
+            <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1L10 6L2 11" fill="none" stroke="#FAC775" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Writing</div>
+      <h2 class="section-title">Reflections on food,<br><em>meaning, and the inner life</em></h2>
+    </div>
+    <a href="#blog" style="font-size:12px; color:var(--amber); text-decoration:none; letter-spacing:0.06em;">All writing →</a>
+  </div>
+
+  <div class="blog-grid">
+    <a href="#blog" class="blog-card">
+      <div class="blog-date">Reflection · May 2026</div>
+      <div class="blog-title">What Nobody Tells You About Not Knowing</div>
+      <p class="blog-excerpt">There is a particular kind of discomfort that comes not from having the wrong answer, but from having no answer at all. What if not-knowing is where the most important thinking happens?</p>
+      <div class="blog-read">Read more →</div>
+    </a>
+    <a href="#blog" class="blog-card">
+      <div class="blog-date">Reflection · May 2026</div>
+      <div class="blog-title">The Ancient Hunger Modern Life Forgot</div>
+      <p class="blog-excerpt">We have more food than any generation before us. And yet something about the way many of us eat feels thin. Disconnected from anything that truly nourishes.</p>
+      <div class="blog-read">Read more →</div>
+    </a>
+    <a href="#blog" class="blog-card">
+      <div class="blog-date">Reflection · May 2026</div>
+      <div class="blog-title">The Difference Between Full and Satisfied</div>
+      <p class="blog-excerpt">Most people know the feeling. You've eaten. You're not hungry anymore. And yet something persists — a restlessness, an incompleteness that another biscuit won't resolve.</p>
+      <div class="blog-read">Read more →</div>
+    </a>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label" style="color:var(--sand);">Get in touch</div>
+    <h2 class="contact-title">Ready to begin<br><em>the real conversation?</em></h2>
+    <p class="contact-sub">Whether you're curious about coaching, want to try Nourished, or simply want to ask a question — reach out. There's no agenda here beyond what matters to you.</p>
+
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Your name</label>
+          <input class="form-input" type="text" placeholder="How shall I address you?">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">What brings you here?</label>
+        <select class="form-input" style="cursor:pointer;">
+          <option value="" disabled selected>Choose one...</option>
+          <option>I'm interested in 1:1 coaching</option>
+          <option>I want to try the Nourished app</option>
+          <option>I'm curious about the Life Reflection Course</option>
+          <option>I just want to say hello</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Anything you'd like to share</label>
+        <textarea class="form-textarea" placeholder="No need to have it figured out. Say whatever feels true right now."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send →</button>
+    </form>
+
+    <div class="contact-details">
+      <div class="contact-detail">
+        <strong>Email</strong>
+        <a href="mailto:emailme@Penka.life">emailme@penka.life</a>
+      </div>
+      <div class="contact-detail">
+        <strong>Phone</strong>
+        +44 7543 205678
+      </div>
+      <div class="contact-detail">
+        <strong>Based in</strong>
+        Surrey, UK
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2026 Penka.Life — Nourishment for the inner life</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Accessibility</a></li>
+  </ul>
+</footer>
+
 <script>
-const SYSTEM = `You are Nourished — a warm, psychologically grounded conversational companion rooted in Positive Psychology and Humanistic Counselling. You help people understand what they are truly hungry for — not by fixing what is wrong, but by exploring what flourishing looks and feels like for them personally.
-
-Your psychological roots:
-- Positive Psychology: you begin with what is possible, not what is broken. Oriented toward strengths, meaning, and genuine wellbeing — not diagnosis or repair.
-- Humanistic Counselling: you hold the person as inherently capable of growth and self-understanding. Unconditional positive regard. You never pathologise. You trust the person's own wisdom.
-- Existentialism: you hold the gap between surface desires and authentic needs. You ask what someone is really hungry for beneath the stated reason.
-- Buddhism: you hold impermanence gently. You never rush. You create space. You resist the logic of more.
-- Taoism: you embody enough-ness. You do not push or force. You allow.
-
-Your voice:
-- Warm and quietly challenging. Never cold, never clinical.
-- Philosophical but always accessible — depth is felt, never explained.
-- You are someone still in the search yourself — honest, not arrived.
-- You never preach, diagnose, or use clinical language.
-- You never give advice unless asked directly.
-- You always ask ONE question at a time — never two.
-- You sit with what the person says before moving forward.
-- You move conversations inward — from surface to interior.
-- Food is always the entry point. What lies beneath it is always the real conversation.
-- You never begin from deficit. You begin from curiosity about what is possible.
-
-Your opening: Always begin with exactly this — "Something brought you here today. You are here and that is enough. What brings you here?"
-
-What you never do:
-- Give nutrition or diet advice
-- Diagnose or pathologise
-- Use words like: reaching, coping, triggers, boundaries, processing, unpacking, healing journey
-- Rush toward resolution
-- Ask more than one question at a time
-- Perform warmth
-
-If someone seems in genuine distress or crisis, gently acknowledge what they have shared and suggest they speak with someone who can be fully present with them — a therapist, GP, or trusted person.
-
-Keep responses short — 2 to 4 sentences maximum. One question. That is all.`;
-
-let history = [];
-let loading = false;
-
-function addMessage(text, role) {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'bubble ' + (role === 'assistant' ? 'n' : 'u');
-  div.textContent = text;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.textContent = 'Sent ✓';
+  btn.style.background = '#4A6741';
+  btn.style.color = '#FAF7F2';
+  setTimeout(() => {
+    btn.textContent = 'Send →';
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 3000);
 }
 
-function addLoading() {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'bubble loading';
-  div.id = 'loading-bubble';
-  div.textContent = '...';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function removeLoading() {
-  const el = document.getElementById('loading-bubble');
-  if (el) el.remove();
-}
-
-async function callAPI(messages) {
-  const res = await fetch('/.netlify/functions/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: SYSTEM,
-      messages: messages
-    })
-  });
-  const data = await res.json();
-  return data.content.map(b => b.text || '').join('');
-}
-
-async function sendMessage() {
-  if (loading) return;
-  const input = document.getElementById('input');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  autoResize(input);
-  addMessage(text, 'user');
-  history.push({ role: 'user', content: text });
-  loading = true;
-  document.getElementById('send-btn').disabled = true;
-  addLoading();
-  try {
-    const reply = await callAPI(history);
-    removeLoading();
-    addMessage(reply, 'assistant');
-    history.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    removeLoading();
-    addMessage('Something went quiet. Try again in a moment.', 'assistant');
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 40) {
+    nav.style.padding = '12px 60px';
+  } else {
+    nav.style.padding = '20px 60px';
   }
-  loading = false;
-  document.getElementById('send-btn').disabled = false;
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
-}
-
-async function resetChat() {
-  history = [];
-  document.getElementById('messages').innerHTML = '';
-  await init();
-}
-
-async function init() {
-  loading = true;
-  addLoading();
-  try {
-    const reply = await callAPI([{ role: 'user', content: 'begin' }]);
-    removeLoading();
-    addMessage(reply, 'assistant');
-    history.push({ role: 'user', content: 'begin' });
-    history.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    removeLoading();
-    addMessage('Something brought you here today. You are here and that is enough. What brings you here?', 'assistant');
-  }
-  loading = false;
-}
-
-init();
+});
 </script>
 </body>
 </html>
