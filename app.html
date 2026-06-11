@@ -31,7 +31,50 @@
   .send-btn { width: 40px; height: 40px; border-radius: 50%; background: #854F0B; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
   .send-btn:disabled { background: #D3D1C7; cursor: not-allowed; }
   .send-btn:hover:not(:disabled) { opacity: 0.85; }
-  .footer { text-align: center; padding: 16px 0 0; display: flex; flex-direction: column; gap: 6px; }
+  /* ACCESSIBILITY TOOLBAR */
+  .a11y-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: #FAF7F2; border-top: 0.5px solid #D3D1C7; padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; box-shadow: 0 -4px 20px rgba(44,44,42,0.06); }
+  .a11y-btn { background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 6px 12px; font-size: 12px; color: #2C2C2A; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: inherit; transition: background 0.15s; white-space: nowrap; }
+  .a11y-btn:hover { background: #E8E5DC; }
+  .a11y-btn.active { background: #854F0B; color: #FAC775; border-color: #854F0B; }
+  .a11y-label { font-size: 10px; color: #888780; letter-spacing: 0.1em; text-transform: uppercase; flex-shrink: 0; }
+  .a11y-divider { width: 0.5px; height: 20px; background: #D3D1C7; flex-shrink: 0; }
+  .a11y-panel { position: fixed; bottom: 56px; left: 0; right: 0; z-index: 499; background: #FAF7F2; border-top: 0.5px solid #D3D1C7; padding: 16px; display: none; box-shadow: 0 -8px 32px rgba(44,44,42,0.08); }
+  .a11y-panel.open { display: block; }
+  .a11y-section { margin-bottom: 14px; }
+  .a11y-section-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #888780; margin-bottom: 8px; }
+  .a11y-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .a11y-opt { background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 6px 14px; font-size: 13px; color: #2C2C2A; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .a11y-opt:hover { background: #E8E5DC; }
+  .a11y-opt.selected { background: #854F0B; color: #FAC775; border-color: #854F0B; }
+
+  /* ACCESSIBILITY OVERRIDES */
+  body.font-lg .bubble { font-size: 19px !important; }
+  body.font-xl .bubble { font-size: 22px !important; }
+  body.font-xxl .bubble { font-size: 26px !important; }
+  body.font-dyslexic, body.font-dyslexic * { font-family: 'OpenDyslexic', Arial, sans-serif !important; }
+  body.bg-cream { background: #FFFDF7 !important; }
+  body.bg-cream .chat-window, body.bg-cream .input-wrap { background: #FFFDF7 !important; }
+  body.bg-grey { background: #F0F0F0 !important; }
+  body.bg-grey .chat-window, body.bg-grey .input-wrap { background: #F0F0F0 !important; }
+  body.bg-dark { background: #1A1A18 !important; color: #FAF7F2 !important; }
+  body.bg-dark .chat-window { background: #2C2C2A !important; border-color: #444 !important; }
+  body.bg-dark .bubble.n { background: #3A3A38 !important; color: #FAF7F2 !important; }
+  body.bg-dark .input-wrap { background: #3A3A38 !important; border-color: #444 !important; }
+  body.bg-dark textarea { color: #FAF7F2 !important; }
+  body.bg-dark .a11y-bar { background: #2C2C2A !important; border-color: #444 !important; }
+  body.bg-dark .a11y-btn { background: #3A3A38 !important; color: #FAF7F2 !important; border-color: #444 !important; }
+  body.bg-dark .a11y-panel { background: #2C2C2A !important; border-color: #444 !important; }
+  body.bg-dark .a11y-opt { background: #3A3A38 !important; color: #FAF7F2 !important; border-color: #444 !important; }
+  body.line-relaxed .bubble { line-height: 2 !important; }
+  body.line-wide .bubble { line-height: 2.4 !important; }
+  body.high-contrast .bubble.n { background: #FFFFFF !important; color: #000000 !important; }
+  body.high-contrast .bubble.u { background: #000000 !important; color: #FFFFFF !important; }
+
+  /* OpenDyslexic font */
+  @font-face { font-family: 'OpenDyslexic'; src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.woff') format('woff'); }
+
+  /* Adjust container for toolbar */
+  .container { padding-bottom: 70px; }
   .reset-btn { font-size: 11px; color: #888780; background: none; border: none; cursor: pointer; letter-spacing: 0.06em; }
   .reset-btn:hover { color: #2C2C2A; }
   .footer-note { font-size: 11px; color: #C8A882; letter-spacing: 0.04em; }
@@ -318,5 +361,175 @@ if (sessionStorage.getItem('nourished_consent') === '1') {
   init();
 }
 </script>
-</body>
-</html>
+<!-- ACCESSIBILITY PANEL -->
+<div class="a11y-panel" id="a11y-panel">
+  <div class="a11y-section">
+    <div class="a11y-section-label">Font size</div>
+    <div class="a11y-options">
+      <button class="a11y-opt selected" onclick="setFont('normal', this)">Normal</button>
+      <button class="a11y-opt" onclick="setFont('font-lg', this)">Large</button>
+      <button class="a11y-opt" onclick="setFont('font-xl', this)">Extra large</button>
+      <button class="a11y-opt" onclick="setFont('font-xxl', this)">Maximum</button>
+    </div>
+  </div>
+  <div class="a11y-section">
+    <div class="a11y-section-label">Font style</div>
+    <div class="a11y-options">
+      <button class="a11y-opt selected" onclick="setFontStyle('normal', this)">Standard</button>
+      <button class="a11y-opt" onclick="setFontStyle('font-dyslexic', this)">Dyslexia-friendly</button>
+    </div>
+  </div>
+  <div class="a11y-section">
+    <div class="a11y-section-label">Background</div>
+    <div class="a11y-options">
+      <button class="a11y-opt selected" onclick="setBg('bg-default', this)" style="background:#FAF7F2;">Parchment</button>
+      <button class="a11y-opt" onclick="setBg('bg-cream', this)" style="background:#FFFDF7;">Soft cream</button>
+      <button class="a11y-opt" onclick="setBg('bg-grey', this)" style="background:#F0F0F0;">Light grey</button>
+      <button class="a11y-opt" onclick="setBg('bg-dark', this)" style="background:#2C2C2A; color:#FAF7F2;">Dark</button>
+    </div>
+  </div>
+  <div class="a11y-section">
+    <div class="a11y-section-label">Line spacing</div>
+    <div class="a11y-options">
+      <button class="a11y-opt selected" onclick="setSpacing('normal', this)">Normal</button>
+      <button class="a11y-opt" onclick="setSpacing('line-relaxed', this)">Relaxed</button>
+      <button class="a11y-opt" onclick="setSpacing('line-wide', this)">Wide</button>
+    </div>
+  </div>
+  <div class="a11y-section" style="margin-bottom:0;">
+    <div class="a11y-section-label">Contrast</div>
+    <div class="a11y-options">
+      <button class="a11y-opt selected" onclick="setContrast('normal', this)">Standard</button>
+      <button class="a11y-opt" onclick="setContrast('high-contrast', this)">High contrast</button>
+    </div>
+  </div>
+</div>
+
+<!-- ACCESSIBILITY TOOLBAR -->
+<div class="a11y-bar">
+  <span class="a11y-label">Accessibility</span>
+  <div class="a11y-divider"></div>
+  <button class="a11y-btn" onclick="togglePanel()">⚙ Display settings</button>
+  <div class="a11y-divider"></div>
+  <button class="a11y-btn" id="voice-btn" onclick="toggleVoice()">🎤 Voice input</button>
+</div>
+
+<script>
+// Accessibility functions
+const body = document.body;
+let fontClass = '', fontStyleClass = '', bgClass = '', spacingClass = '', contrastClass = '';
+let voiceActive = false;
+let recognition = null;
+
+function clearSelected(group) {
+  group.querySelectorAll('.a11y-opt').forEach(b => b.classList.remove('selected'));
+}
+
+function setFont(cls, btn) {
+  if (fontClass) body.classList.remove(fontClass);
+  fontClass = cls === 'normal' ? '' : cls;
+  if (fontClass) body.classList.add(fontClass);
+  clearSelected(btn.parentElement);
+  btn.classList.add('selected');
+  savePrefs();
+}
+
+function setFontStyle(cls, btn) {
+  if (fontStyleClass) body.classList.remove(fontStyleClass);
+  fontStyleClass = cls === 'normal' ? '' : cls;
+  if (fontStyleClass) body.classList.add(fontStyleClass);
+  clearSelected(btn.parentElement);
+  btn.classList.add('selected');
+  savePrefs();
+}
+
+function setBg(cls, btn) {
+  ['bg-default','bg-cream','bg-grey','bg-dark'].forEach(c => body.classList.remove(c));
+  if (cls !== 'bg-default') body.classList.add(cls);
+  bgClass = cls;
+  clearSelected(btn.parentElement);
+  btn.classList.add('selected');
+  savePrefs();
+}
+
+function setSpacing(cls, btn) {
+  if (spacingClass) body.classList.remove(spacingClass);
+  spacingClass = cls === 'normal' ? '' : cls;
+  if (spacingClass) body.classList.add(spacingClass);
+  clearSelected(btn.parentElement);
+  btn.classList.add('selected');
+  savePrefs();
+}
+
+function setContrast(cls, btn) {
+  if (contrastClass) body.classList.remove(contrastClass);
+  contrastClass = cls === 'normal' ? '' : cls;
+  if (contrastClass) body.classList.add(contrastClass);
+  clearSelected(btn.parentElement);
+  btn.classList.add('selected');
+  savePrefs();
+}
+
+function togglePanel() {
+  document.getElementById('a11y-panel').classList.toggle('open');
+}
+
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input is not supported in your browser. Try Chrome or Edge.');
+    return;
+  }
+  if (voiceActive) {
+    recognition.stop();
+    voiceActive = false;
+    document.getElementById('voice-btn').classList.remove('active');
+    document.getElementById('voice-btn').textContent = '🎤 Voice input';
+    return;
+  }
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-GB';
+  recognition.onstart = () => {
+    voiceActive = true;
+    document.getElementById('voice-btn').classList.add('active');
+    document.getElementById('voice-btn').textContent = '🔴 Listening...';
+  };
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    document.getElementById('input').value = transcript;
+    autoResize(document.getElementById('input'));
+  };
+  recognition.onend = () => {
+    voiceActive = false;
+    document.getElementById('voice-btn').classList.remove('active');
+    document.getElementById('voice-btn').textContent = '🎤 Voice input';
+  };
+  recognition.onerror = () => {
+    voiceActive = false;
+    document.getElementById('voice-btn').classList.remove('active');
+    document.getElementById('voice-btn').textContent = '🎤 Voice input';
+  };
+  recognition.start();
+}
+
+function savePrefs() {
+  try {
+    sessionStorage.setItem('a11y_prefs', JSON.stringify({ fontClass, fontStyleClass, bgClass, spacingClass, contrastClass }));
+  } catch(e) {}
+}
+
+function loadPrefs() {
+  try {
+    const prefs = JSON.parse(sessionStorage.getItem('a11y_prefs') || '{}');
+    if (prefs.fontClass) { body.classList.add(prefs.fontClass); fontClass = prefs.fontClass; }
+    if (prefs.fontStyleClass) { body.classList.add(prefs.fontStyleClass); fontStyleClass = prefs.fontStyleClass; }
+    if (prefs.bgClass && prefs.bgClass !== 'bg-default') { body.classList.add(prefs.bgClass); bgClass = prefs.bgClass; }
+    if (prefs.spacingClass) { body.classList.add(prefs.spacingClass); spacingClass = prefs.spacingClass; }
+    if (prefs.contrastClass) { body.classList.add(prefs.contrastClass); contrastClass = prefs.contrastClass; }
+  } catch(e) {}
+}
+
+loadPrefs();
+</script>
