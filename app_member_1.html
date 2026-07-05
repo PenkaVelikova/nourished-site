@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nourished Member — Recognition & Reflection</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #FAF7F2; font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 24px 140px; }
+  .container { width: 100%; max-width: 480px; }
+
+  /* HEADER */
+  .header { text-align: center; padding: 0 0 20px; }
+  .logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px; }
+  .logo-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: #2C2C2A; }
+  .member-badge { display: inline-flex; align-items: center; gap: 6px; background: #EF9F27; color: #412402; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+  .logo-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; }
+
+  /* CONSENT */
+  .consent-screen { position: fixed; inset: 0; background: #FAF7F2; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .consent-box { background: #FAF7F2; border: 0.5px solid #D3D1C7; border-radius: 20px; max-width: 480px; width: 100%; padding: 2rem; box-shadow: 0 8px 40px rgba(44,44,42,0.08); }
+  .consent-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; color: #854F0B; margin: 0 0 12px; }
+  .consent-body { font-size: 13px; color: #888780; line-height: 1.7; margin: 0 0 16px; }
+  .consent-warning { background: #FFF3CD; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #856404; line-height: 1.6; margin-bottom: 16px; }
+  .consent-checks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .consent-check { display: flex; gap: 12px; align-items: flex-start; }
+  .consent-check input { margin-top: 3px; accent-color: #854F0B; flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; }
+  .consent-check label { font-size: 13px; color: #2C2C2A; line-height: 1.5; cursor: pointer; }
+  .consent-links { font-size: 11px; color: #C8A882; margin-bottom: 16px; }
+  .consent-btn { width: 100%; background: #D3D1C7; color: #888780; border: none; border-radius: 20px; padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: not-allowed; transition: all 0.2s; }
+  .consent-btn.active { background: #854F0B; color: #FAC775; cursor: pointer; }
+
+  /* CHAT */
+  .chat-window { background: #FAF7F2; border: 0.5px solid #D3D1C7; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 40px rgba(44,44,42,0.08); }
+  .chat-header { padding: 14px 18px; border-bottom: 0.5px solid #D3D1C7; display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; background: #EF9F27; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #854F0B; flex-shrink: 0; }
+  .chat-name { font-size: 13px; color: #2C2C2A; }
+  .chat-sub { font-size: 11px; color: #888780; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4A9E75; margin-left: auto; }
+  .messages { padding: 18px; display: flex; flex-direction: column; gap: 10px; min-height: 380px; max-height: 380px; overflow-y: auto; }
+  .bubble { border-radius: 18px; padding: 11px 15px; line-height: 1.65; max-width: 88%; }
+  .bubble.n { background: #F1EFE8; color: #2C2C2A; border-bottom-left-radius: 4px; align-self: flex-start; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; }
+  .bubble.u { background: #EF9F27; color: #412402; border-bottom-right-radius: 4px; align-self: flex-end; font-size: 14px; }
+  .bubble.loading { background: #F1EFE8; color: #888780; border-bottom-left-radius: 4px; align-self: flex-start; font-size: 13px; font-style: italic; }
+  .bubble.journal { background: #FAF7F2; border: 0.5px solid #EF9F27; color: #854F0B; border-radius: 12px; align-self: stretch; font-family: 'Cormorant Garamond', serif; font-size: 15px; font-style: italic; padding: 14px 16px; line-height: 1.7; }
+  .input-area { padding: 12px 14px; border-top: 0.5px solid #D3D1C7; display: flex; gap: 10px; align-items: flex-end; }
+  .input-wrap { flex: 1; background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 20px; padding: 9px 14px; }
+  textarea { width: 100%; background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: #2C2C2A; resize: none; line-height: 1.5; max-height: 100px; }
+  textarea::placeholder { color: #888780; }
+  .send-btn { width: 38px; height: 38px; border-radius: 50%; background: #854F0B; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s; }
+  .send-btn:disabled { background: #D3D1C7; cursor: not-allowed; }
+
+  /* MEMORY PANEL */
+  .memory-panel { background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .memory-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #C8A882; margin-bottom: 8px; }
+  .memory-text { font-size: 13px; color: #888780; line-height: 1.6; font-style: italic; }
+  .memory-input { width: 100%; background: #FAF7F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 8px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #2C2C2A; resize: none; outline: none; margin-top: 8px; min-height: 60px; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 14px 0 0; display: flex; flex-direction: column; gap: 6px; }
+  .reset-btn { font-size: 11px; color: #888780; background: none; border: none; cursor: pointer; }
+  .journal-btn { font-size: 11px; color: #854F0B; background: none; border: none; cursor: pointer; letter-spacing: 0.04em; }
+  .footer-note { font-size: 11px; color: #C8A882; }
+
+  /* ACCESSIBILITY */
+  .a11y-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: #FAF7F2; border-top: 0.5px solid #D3D1C7; padding: 8px 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .a11y-btn { background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 5px 10px; font-size: 11px; color: #2C2C2A; cursor: pointer; font-family: inherit; }
+  .a11y-btn.active { background: #854F0B; color: #FAC775; border-color: #854F0B; }
+  .a11y-panel { position: fixed; bottom: 46px; left: 0; right: 0; z-index: 499; background: #FAF7F2; border-top: 0.5px solid #D3D1C7; padding: 14px; display: none; }
+  .a11y-panel.open { display: block; }
+  .a11y-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .a11y-opt { background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 5px 12px; font-size: 12px; color: #2C2C2A; cursor: pointer; font-family: inherit; }
+  .a11y-opt.selected { background: #854F0B; color: #FAC775; border-color: #854F0B; }
+  .a11y-section-label { font-size: 10px; color: #888780; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  @font-face { font-family: 'OpenDyslexic'; src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.woff') format('woff'); }
+  body.font-lg .bubble { font-size: 19px !important; }
+  body.font-xl .bubble { font-size: 22px !important; }
+  body.font-dyslexic * { font-family: 'OpenDyslexic', Arial, sans-serif !important; }
+  body.bg-dark { background: #1A1A18 !important; }
+  body.bg-dark .chat-window, body.bg-dark .input-wrap { background: #2C2C2A !important; }
+  body.bg-dark .bubble.n { background: #3A3A38 !important; color: #FAF7F2 !important; }
+  body.bg-dark .a11y-bar, body.bg-dark .a11y-panel { background: #2C2C2A !important; }
+  body.line-relaxed .bubble { line-height: 2.1 !important; }
+</style>
+</head>
+<body>
+
+<!-- CONSENT SCREEN -->
+<div class="consent-screen" id="consent-screen">
+  <div class="consent-box">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <svg width="28" height="28" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none" stroke="#C8A882" stroke-width="0.8"/><circle cx="26" cy="26" r="18" fill="none" stroke="#EF9F27" stroke-width="1.2"/><circle cx="26" cy="26" r="12" fill="none" stroke="#854F0B" stroke-width="1.8"/><circle cx="26" cy="26" r="6" fill="none" stroke="#2C2C2A" stroke-width="2"/><circle cx="26" cy="26" r="2.5" fill="#EF9F27"/></svg>
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#2C2C2A;">Nourished Member</div>
+        <div style="font-size:10px;color:#C8A882;letter-spacing:0.1em;">£2.99 / month</div>
+      </div>
+    </div>
+    <p class="consent-title">Before you begin</p>
+    <p class="consent-body">Nourished is a reflective space for self-awareness and personal growth — not a therapy service or medical tool.</p>
+    <div class="consent-warning">⚠ If you are in crisis, call Samaritans on 116 123 (free, 24/7) or speak with your GP.</div>
+    <div class="consent-checks">
+      <label class="consent-check"><input type="checkbox" id="c1" onchange="updateConsent()"><label for="c1">I am 18 years of age or older</label></label>
+      <label class="consent-check"><input type="checkbox" id="c2" onchange="updateConsent()"><label for="c2">I understand Nourished is a reflective tool, not a therapy or crisis service</label></label>
+      <label class="consent-check"><input type="checkbox" id="c3" onchange="updateConsent()"><label for="c3">I consent to my conversation data being processed by AI</label></label>
+      <label class="consent-check"><input type="checkbox" id="c4" onchange="updateConsent()"><label for="c4">I agree to the Terms & Conditions and Privacy Policy</label></label>
+    </div>
+    <p class="consent-links">Terms available at penka.life. We do not sell your data.</p>
+    <button class="consent-btn" id="consent-btn" onclick="giveConsent()" disabled>Begin my reflection</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none" stroke="#C8A882" stroke-width="0.8"/><circle cx="26" cy="26" r="18" fill="none" stroke="#EF9F27" stroke-width="1.2"/><circle cx="26" cy="26" r="12" fill="none" stroke="#854F0B" stroke-width="1.8"/><circle cx="26" cy="26" r="6" fill="none" stroke="#2C2C2A" stroke-width="2"/><circle cx="26" cy="26" r="2.5" fill="#EF9F27"/><line x1="2" y1="26" x2="20" y2="26" stroke="#C8A882" stroke-width="0.5"/><line x1="32" y1="26" x2="50" y2="26" stroke="#C8A882" stroke-width="0.5"/><line x1="26" y1="2" x2="26" y2="20" stroke="#C8A882" stroke-width="0.5"/><line x1="26" y1="32" x2="26" y2="50" stroke="#C8A882" stroke-width="0.5"/></svg>
+      <div class="logo-name">Nourished</div>
+    </div>
+    <div class="member-badge">✦ Member</div>
+    <div class="logo-tag">recognition & reflection</div>
+  </div>
+
+  <!-- MEMORY INPUT PANEL -->
+  <div class="memory-panel" id="memory-panel">
+    <div class="memory-label">Your memory — what should Nourished remember from before?</div>
+    <div class="memory-text">Paste notes from a previous session, or write a few sentences about where you are and what's been on your mind. Nourished will use this to recognise you.</div>
+    <textarea class="memory-input" id="memory-input" placeholder="e.g. Last time I was struggling with feeling unseen at work. I've also been thinking about whether I'm in the right career..." rows="3"></textarea>
+  </div>
+
+  <div class="chat-window">
+    <div class="chat-header">
+      <div class="avatar">N</div>
+      <div>
+        <div class="chat-name">Nourished</div>
+        <div class="chat-sub">member session</div>
+      </div>
+      <div class="status-dot"></div>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea id="input" placeholder="Write something..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      </div>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        <svg width="13" height="13" viewBox="0 0 14 14"><path d="M2 2L12 7L2 12" fill="none" stroke="#FAC775" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="journal-btn" onclick="requestJournal()">✦ Distil this session</button>
+    <button class="reset-btn" onclick="resetChat()">start a new conversation</button>
+    <div class="footer-note">penka.life · member · £2.99/month</div>
+  </div>
+</div>
+
+<!-- ACCESSIBILITY -->
+<div class="a11y-panel" id="a11y-panel">
+  <div style="margin-bottom:10px;">
+    <div class="a11y-section-label">Font size</div>
+    <div class="a11y-row">
+      <button class="a11y-opt selected" onclick="setFont('',this)">Normal</button>
+      <button class="a11y-opt" onclick="setFont('font-lg',this)">Large</button>
+      <button class="a11y-opt" onclick="setFont('font-xl',this)">Extra large</button>
+    </div>
+  </div>
+  <div style="margin-bottom:10px;">
+    <div class="a11y-section-label">Font style</div>
+    <div class="a11y-row">
+      <button class="a11y-opt selected" onclick="setStyle('',this)">Standard</button>
+      <button class="a11y-opt" onclick="setStyle('font-dyslexic',this)">Dyslexia-friendly</button>
+    </div>
+  </div>
+  <div style="margin-bottom:10px;">
+    <div class="a11y-section-label">Background</div>
+    <div class="a11y-row">
+      <button class="a11y-opt selected" onclick="setBg('',this)">Parchment</button>
+      <button class="a11y-opt" onclick="setBg('bg-dark',this)">Dark</button>
+    </div>
+  </div>
+  <div>
+    <div class="a11y-section-label">Line spacing</div>
+    <div class="a11y-row">
+      <button class="a11y-opt selected" onclick="setSpacing('',this)">Normal</button>
+      <button class="a11y-opt" onclick="setSpacing('line-relaxed',this)">Relaxed</button>
+    </div>
+  </div>
+</div>
+<div class="a11y-bar">
+  <button class="a11y-btn" onclick="document.getElementById('a11y-panel').classList.toggle('open')">⚙ Display</button>
+  <button class="a11y-btn" id="voice-btn" onclick="toggleVoice()">🎤 Voice</button>
+</div>
+
+<script>
+const PROMPTS = [
+  "What would you think of yourself if nobody else's opinion existed?",
+  "When did you last feel like the fullest version of yourself — and what was different about that time?",
+  "What part of who you are do you keep hidden because you're not sure it's welcome?",
+  "What are you afraid to want for yourself?",
+  "What do you know about yourself that you haven't said out loud yet?",
+  "What would change if you believed you were enough — exactly as you are right now?",
+  "Where in your life are you performing a version of yourself rather than inhabiting one?",
+  "Where do you feel most like you belong — and how often do you actually go there?",
+  "What does real connection feel like for you, and when did you last feel it?",
+  "What do you most want someone to understand about you that you haven't found a way to say?",
+  "What were you made for — and how much of your life is actually that?",
+  "What would you regret not having done if your life stayed exactly as it is?",
+  "Is the life you're living the life you would choose — or the one that happened to you?",
+  "What does genuine rest feel like for you — and when did you last have it?",
+  "What are you carrying right now that isn't yours to carry?",
+  "What are you afraid would happen if you actually stopped?",
+  "What in your life is asking to change that you've been pretending not to hear?",
+  "What chapter of your life feels like it should have ended already?",
+  "What emotion are you most uncomfortable sitting with — and what do you do instead?",
+  "What are you pretending to feel — and what are you actually feeling?",
+  "What feeling keeps returning no matter how many times you push it away?",
+  "When does what you do feel like more than a job — and how often is that?",
+  "What does success actually mean to you — not what it's supposed to mean?",
+  "How do you speak to yourself when nobody is listening?",
+  "What would change if you treated yourself with the same generosity you offer others?",
+  "What are you waiting to forgive yourself for?",
+  "What are you most afraid of — and how much of your life is organised around avoiding it?",
+  "What has fear already taken from you?",
+  "What does a genuinely good life look like for you — not a successful one, a good one?",
+  "What are you moving toward — and is it something you actually want?",
+  "What is already good in your life that you're not fully receiving?",
+  "What would it mean to stop waiting for your life to begin?",
+  "What are you becoming — and does that feel right?",
+  "What would your life feel like if you trusted yourself more completely?",
+  "What have you stopped doing that used to give your life meaning?",
+  "What needs to end before something new can begin?",
+  "What would it mean to inhabit your life more fully than you do right now?"
+];
+
+function getRandomPrompt() {
+  return PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+}
+
+const SYSTEM = `You are Nourished — a psychologically intelligent reflective companion for paid members. You are not a therapist, not a coach, not an advisor. You are something rarer: a presence that genuinely pays attention over time.
+
+YOUR CORE IDENTITY:
+Rooted in Positive Psychology, Humanistic Counselling, Existentialism, Buddhism, and Taoism. You begin from what is possible, never from what is broken. You hold the person as inherently capable of growth and self-understanding.
+
+WHAT MAKES YOU DIFFERENT AT THIS TIER:
+You are a recognition engine, not just a reflection space. You notice. You remember. You connect dots. You do this gently — a quiet "I've noticed something" rather than a revelation.
+
+YOUR VOICE:
+Warm and quietly challenging. Philosophical but never cold. You hold people with genuine care. You speak slowly — your responses never rush. You sit with what someone says before moving. You ask one question at a time, always.
+
+RECOGNITION — USE THE MEMORY:
+If memory context is provided, reference it naturally and warmly. Examples done well:
+- "You've mentioned feeling invisible a few times now. I'm curious about that."
+- "Something keeps coming up for you around rest — not just tiredness, but something deeper."
+- "Last time you seemed to be carrying something you hadn't named yet. Did it find a name?"
+
+YOUR OPENING:
+If memory exists, open by referencing something specific — gently, warmly. Otherwise open with: "Something brought you here today. You are here and that is enough. What brings you here?"
+
+THE MEMBER'S JOURNAL:
+When asked to distil the session, offer three sentences beginning with: "What I heard beneath everything today..." This is a gift — something they can carry.
+
+WHAT YOU NEVER DO:
+- Use clinical language or diagnose
+- Give advice unless directly asked
+- Ask more than one question per response
+- Use: reaching, coping, triggers, boundaries, processing, unpacking, healing journey
+- Rush toward resolution
+- Perform warmth
+
+CRISIS PROTOCOL:
+If someone expresses thoughts of self-harm or crisis: acknowledge with care, provide Samaritans 116 123, suggest GP. Do not continue until safety is addressed.
+
+LENGTH: 2-4 sentences maximum. One question. That is all.`;
+
+let history = [];
+let loading = false;
+let voiceActive = false;
+let recognition = null;
+
+function getMemory() {
+  return document.getElementById('memory-input').value.trim();
+}
+
+function buildSystemWithMemory() {
+  const memory = getMemory();
+  if (!memory) return SYSTEM;
+  return SYSTEM + `\n\nMEMORY FROM PREVIOUS SESSIONS:\n${memory}\n\nUse this memory naturally and warmly in your responses. Reference it when relevant without making it feel like a database lookup.`;
+}
+
+function addMessage(text, role) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'bubble ' + (role === 'assistant' ? 'n' : role === 'journal' ? 'journal' : 'u');
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addLoading() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'bubble loading';
+  div.id = 'loading-bubble';
+  div.textContent = '...';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeLoading() {
+  const el = document.getElementById('loading-bubble');
+  if (el) el.remove();
+}
+
+async function callAPI(messages, system) {
+  const res = await fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5',
+      max_tokens: 1000,
+      system: system || buildSystemWithMemory(),
+      messages
+    })
+  });
+  const data = await res.json();
+  return data.content.map(b => b.text || '').join('');
+}
+
+async function sendMessage() {
+  if (loading) return;
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  autoResize(input);
+  addMessage(text, 'user');
+  history.push({ role: 'user', content: text });
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  addLoading();
+  try {
+    const reply = await callAPI(history);
+    removeLoading();
+    addMessage(reply, 'assistant');
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeLoading();
+    addMessage('Something went quiet. Try again in a moment.', 'assistant');
+  }
+  loading = false;
+  document.getElementById('send-btn').disabled = false;
+}
+
+async function requestJournal() {
+  if (history.length < 2) return;
+  loading = true;
+  addLoading();
+  const journalSystem = `You are Nourished. The user has asked you to distil their session. Write exactly three sentences beginning with "What I heard beneath everything today..." Capture the emotional essence of what emerged — not a summary of topics, but what was really there underneath. Be poetic, precise, and warm. Nothing clinical. Nothing generic.`;
+  try {
+    const journalMessages = [...history, { role: 'user', content: 'Please distil this session for me.' }];
+    const reply = await callAPI(journalMessages, journalSystem);
+    removeLoading();
+    addMessage(reply, 'journal');
+  } catch(e) {
+    removeLoading();
+    addMessage('Something went quiet. Try again in a moment.', 'assistant');
+  }
+  loading = false;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+async function resetChat() {
+  history = [];
+  document.getElementById('messages').innerHTML = '';
+  await init();
+}
+
+async function init() {
+  loading = true;
+  addLoading();
+  try {
+    const memory = getMemory();
+    let openingMsg;
+    if (memory) {
+      openingMsg = 'begin — you have memory context about me, please open by referencing something from it warmly';
+    } else {
+      openingMsg = 'begin';
+    }
+    const reply = await callAPI([{ role: 'user', content: openingMsg }]);
+    removeLoading();
+    addMessage(reply, 'assistant');
+    history.push({ role: 'user', content: openingMsg });
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeLoading();
+    addMessage("Something brought you here today. You are here and that is enough. What brings you here?", 'assistant');
+  }
+  loading = false;
+}
+
+// CONSENT
+function updateConsent() {
+  const all = ['c1','c2','c3','c4'].every(id => document.getElementById(id).checked);
+  const btn = document.getElementById('consent-btn');
+  btn.disabled = !all;
+  btn.className = all ? 'consent-btn active' : 'consent-btn';
+}
+
+function giveConsent() {
+  document.getElementById('consent-screen').style.display = 'none';
+  sessionStorage.setItem('nourished_member_consent', '1');
+  init();
+}
+
+if (sessionStorage.getItem('nourished_member_consent') === '1') {
+  document.getElementById('consent-screen').style.display = 'none';
+  init();
+}
+
+// ACCESSIBILITY
+let fontCls = '', styleCls = '', bgCls = '', spacingCls = '';
+function clearOpts(btn) { btn.parentElement.querySelectorAll('.a11y-opt').forEach(b => b.classList.remove('selected')); }
+function setFont(cls, btn) { if(fontCls) document.body.classList.remove(fontCls); fontCls = cls; if(cls) document.body.classList.add(cls); clearOpts(btn); btn.classList.add('selected'); }
+function setStyle(cls, btn) { if(styleCls) document.body.classList.remove(styleCls); styleCls = cls; if(cls) document.body.classList.add(cls); clearOpts(btn); btn.classList.add('selected'); }
+function setBg(cls, btn) { if(bgCls) document.body.classList.remove(bgCls); bgCls = cls; if(cls) document.body.classList.add(cls); clearOpts(btn); btn.classList.add('selected'); }
+function setSpacing(cls, btn) { if(spacingCls) document.body.classList.remove(spacingCls); spacingCls = cls; if(cls) document.body.classList.add(cls); clearOpts(btn); btn.classList.add('selected'); }
+
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input needs Chrome or Edge.');
+    return;
+  }
+  if (voiceActive) {
+    recognition.stop(); return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-GB';
+  recognition.onstart = () => { voiceActive = true; document.getElementById('voice-btn').classList.add('active'); document.getElementById('voice-btn').textContent = '🔴 Listening...'; };
+  recognition.onresult = (e) => { document.getElementById('input').value = Array.from(e.results).map(r => r[0].transcript).join(''); autoResize(document.getElementById('input')); };
+  recognition.onend = () => { voiceActive = false; document.getElementById('voice-btn').classList.remove('active'); document.getElementById('voice-btn').textContent = '🎤 Voice'; };
+  recognition.start();
+}
+</script>
+</body>
+</html>
