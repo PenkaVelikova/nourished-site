@@ -86,27 +86,25 @@
 </head>
 <body>
 
-<!-- CONSENT SCREEN -->
+<!-- COMING SOON SCREEN -->
 <div class="consent-screen" id="consent-screen">
   <div class="consent-box">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
       <svg width="28" height="28" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" fill="none" stroke="#C8A882" stroke-width="0.8"/><circle cx="26" cy="26" r="18" fill="none" stroke="#EF9F27" stroke-width="1.2"/><circle cx="26" cy="26" r="12" fill="none" stroke="#854F0B" stroke-width="1.8"/><circle cx="26" cy="26" r="6" fill="none" stroke="#2C2C2A" stroke-width="2"/><circle cx="26" cy="26" r="2.5" fill="#EF9F27"/></svg>
       <div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#2C2C2A;">Nourished Member</div>
         <div style="font-size:10px;color:#C8A882;letter-spacing:0.1em;">£2.99 / month</div>
       </div>
     </div>
-    <p class="consent-title">Before you begin</p>
-    <p class="consent-body">Nourished is a reflective space for self-awareness and personal growth — not a therapy service or medical tool.</p>
-    <div class="consent-warning">⚠ If you are in crisis, call Samaritans on 116 123 (free, 24/7) or speak with your GP.</div>
-    <div class="consent-checks">
-      <label class="consent-check"><input type="checkbox" id="c1" onchange="updateConsent()"><label for="c1">I am 18 years of age or older</label></label>
-      <label class="consent-check"><input type="checkbox" id="c2" onchange="updateConsent()"><label for="c2">I understand Nourished is a reflective tool, not a therapy or crisis service</label></label>
-      <label class="consent-check"><input type="checkbox" id="c3" onchange="updateConsent()"><label for="c3">I consent to my conversation data being processed by AI</label></label>
-      <label class="consent-check"><input type="checkbox" id="c4" onchange="updateConsent()"><label for="c4">I agree to the Terms & Conditions and Privacy Policy</label></label>
+    <p class="consent-title">Coming soon</p>
+    <p class="consent-body">The Nourished Member experience is almost ready — bringing recognition, memory, and deeper reflection to your inner life.</p>
+    <p class="consent-body" style="margin-bottom:20px;">Leave your email below and you'll be among the first to know when membership opens. No spam. Just one message when the door opens.</p>
+    <div style="margin-bottom:16px;">
+      <input type="email" id="waitlist-email" placeholder="your@email.com" style="width:100%;background:#F1EFE8;border:0.5px solid #D3D1C7;border-radius:12px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:#2C2C2A;outline:none;margin-bottom:10px;">
+      <button onclick="joinWaitlist()" style="width:100%;background:#854F0B;color:#FAC775;border:none;border-radius:20px;padding:13px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Join the waitlist</button>
     </div>
-    <p class="consent-links">Terms available at penka.life. We do not sell your data.</p>
-    <button class="consent-btn" id="consent-btn" onclick="giveConsent()" disabled>Begin my reflection</button>
+    <div id="waitlist-confirm" style="display:none;background:#E1F5EE;border-radius:8px;padding:10px 14px;font-size:13px;color:#085041;text-align:center;margin-bottom:12px;">Thank you — we'll be in touch soon. 🌿</div>
+    <p style="font-size:11px;color:#C8A882;text-align:center;">In the meantime, try the free app at <a href="/app.html" style="color:#854F0B;">penka.life/app.html</a></p>
   </div>
 </div>
 
@@ -406,23 +404,20 @@ async function init() {
   loading = false;
 }
 
-// CONSENT
-function updateConsent() {
-  const all = ['c1','c2','c3','c4'].every(id => document.getElementById(id).checked);
-  const btn = document.getElementById('consent-btn');
-  btn.disabled = !all;
-  btn.className = all ? 'consent-btn active' : 'consent-btn';
-}
-
-function giveConsent() {
-  document.getElementById('consent-screen').style.display = 'none';
-  sessionStorage.setItem('nourished_member_consent', '1');
-  init();
-}
-
-if (sessionStorage.getItem('nourished_member_consent') === '1') {
-  document.getElementById('consent-screen').style.display = 'none';
-  init();
+// WAITLIST
+function joinWaitlist() {
+  const email = document.getElementById('waitlist-email').value.trim();
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  document.getElementById('waitlist-confirm').style.display = 'block';
+  document.getElementById('waitlist-email').style.display = 'none';
+  document.querySelector('[onclick="joinWaitlist()"]').style.display = 'none';
+  // Store locally for now
+  const waitlist = JSON.parse(localStorage.getItem('nourished_waitlist') || '[]');
+  waitlist.push({ email, date: new Date().toISOString() });
+  localStorage.setItem('nourished_waitlist', JSON.stringify(waitlist));
 }
 
 // ACCESSIBILITY
